@@ -90,6 +90,9 @@ void AC(deque<int> dq, string command)
 
 int main()
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
 	string arr;
 	string command;
 	deque<int> dq;
