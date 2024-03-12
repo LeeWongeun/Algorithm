@@ -1,6 +1,6 @@
 #include <iostream>
+#include <stdio.h>
 #include <vector>
-#include <numeric>
 
 using namespace std;
 
@@ -11,30 +11,21 @@ int main()
 	cout.tie(NULL);
 
 	int n, m;
-	int a, b;
+	int arr[100001];
+	arr[0] = 0;
+	
 	cin >> n >> m;
-
-	vector<int> sum;
-	sum.push_back(0);
-
-	for (int i = 0; i < n; i++)
+	for (int i = 1; i <= n; i++)
 	{
 		int temp;
 		cin >> temp;
-
-		if(i == 0)
-		{
-			sum.push_back(temp);
-		}
-		else
-		{
-			sum.push_back(sum[i] + temp);
-		}
+		arr[i] = arr[i - 1] + temp;
 	}
 
-	for (int i = 0; i < m; i++)
+	for (int i=0; i < m; i++)
 	{
-		cin >> a >> b;
-		cout<< sum[b]-sum[a-1]<<"\n";
+		int begin, end;
+		cin >> begin >> end;
+		cout << arr[end] - arr[begin - 1] << '\n';
 	}
 }
