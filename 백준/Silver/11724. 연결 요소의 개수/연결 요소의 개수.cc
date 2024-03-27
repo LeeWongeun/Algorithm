@@ -1,76 +1,59 @@
 #include <iostream>
 #include <vector>
-#include <queue>
+#include <stack>
 
 using namespace std;
 
-struct node
-{
-	int visited = 0;
-	vector<int> connected;
-};
+void DFS(int start);
 
-void getInput(int& n, int& m, vector<node>& graph)
-{
-	int a, b;
-	cin >> n >> m;
-	graph.resize(n);
-
-	for (int i = 0; i < m; i++)
-	{
-		cin >> a >> b;
-		graph[a - 1].connected.push_back(b - 1);
-		graph[b - 1].connected.push_back(a - 1);
-	}
-}
-
-void BFS(int n, vector<node>& graph, int &cnt)
-{
-	queue<int> q;
-	int current;
-
-	q.push(n);
-	
-	while (!q.empty())
-	{
-		current = q.front();
-		q.pop();
-
-		for (int i = 0; i < graph[current].connected.size(); i++)
-		{
-			if (graph[graph[current].connected[i]].visited == 0)
-			{
-				q.push(graph[current].connected[i]);
-				graph[graph[current].connected[i]].visited = 1;
-			}
-		}
-	}
-
-	cnt++;
-}
-
-int countConnectedComponent(vector<node> graph)
-{
-	int cnt = 0;
-
-	for (int i = 0; i < graph.size(); i++)
-	{
-		if (graph[i].visited == 0)
-		{
-			BFS(i, graph, cnt);
-		}
-	}
-
-	return cnt;
-}
+vector<vector<int>> g;
+vector<bool> isVisited;
 
 int main()
 {
-	int n, m, cnt;
-	vector<node> graph;
+	int n, m;
+	cin >> n >> m;
+	g = vector<vector<int>>(n + 1);
+	isVisited = vector<bool>(n + 1, 0);
+	for (int i = 0; i < m; i++)
+	{
+		int a, b;
+		cin >> a >> b;
+		g[a].push_back(b);
+		g[b].push_back(a);
+	}
 
-	getInput(n, m, graph);
-	cnt = countConnectedComponent(graph);
+	int result = 0;
+	for (int i = 1; i <= n; i++)
+	{
+		if (isVisited[i] == false)
+		{
+			DFS(i);
+			result++;
+		}
+	}
 
-	cout << cnt;
+	cout << result;
+}
+
+void DFS(int start)
+{
+	stack<int> s;
+	s.push(start);
+
+	int cur;
+	while (!s.empty())
+	{
+		cur = s.top();
+		s.pop();
+		for (int i = 0; i < g[cur].size(); i++)
+		{
+			int next = g[cur][i];
+			if (isVisited[next] == false)
+			{
+				s.push(next);
+				isVisited[next] = 1;
+			}
+		}
+	}
 }
