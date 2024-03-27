@@ -1,99 +1,90 @@
 #include <iostream>
 #include <vector>
-#include <stack>
 #include <queue>
 #include <algorithm>
 
 using namespace std;
 
-void getInput(vector<int>(&vertex)[1001], int m);
-void DFS(vector<int> vertex[], int start);
-void BFS(vector<int> vertex[], int start);
+void DFS(int start);
+void BFS(int start);
+void sortGraph();
+
+vector<vector<int>> g;
+vector<bool> isVisited;
 
 int main()
 {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	
 	int n, m, start;
 	cin >> n >> m >> start;
-	
-	vector<int> vertex[1001];
 
-	getInput(vertex, m);
-
-	for (int i = 0; i < n+1; i++)
-	{
-		sort(vertex[i].begin(), vertex[i].end());
-	}
-
-	DFS(vertex, start);
-	cout << endl;
-	BFS(vertex, start);
-}
-
-void getInput(vector<int>(&vertex)[1001], int m)
-{
+	g.resize(n+1);
+	isVisited = vector<bool>(n + 1, 0);
 	for (int i = 0; i < m; i++)
 	{
 		int a, b;
 		cin >> a >> b;
-		vertex[a].push_back(b);
-		vertex[b].push_back(a);
+		g[a].push_back(b);
+		g[b].push_back(a);
+	}
+	sortGraph();
+
+	DFS(start);
+	cout << '\n';
+	isVisited = vector<bool>(n + 1, 0);
+	BFS(start);
+}
+
+void DFS(int start)
+{
+	if (isVisited[start] == 1)
+	{
+		return;
+	}
+	isVisited[start] = 1;
+	cout << start << ' ';
+	for (int i = 0; i < (int)g[start].size(); i++)
+	{
+		int next = g[start][i];
+		if (isVisited[next] == 0)
+		{
+			DFS(next);
+		}
 	}
 }
 
-void DFS(vector<int> vertex[], int start)
+void BFS(int start)
 {
-	stack<int> stack;
-	bool isVisited[1001] = { 0 };
-	int current = start, next;
-	stack.push(current);
+	queue<int> q;
+	q.push(start);
 
-	while (!stack.empty())
+	int cur;
+	isVisited[start] = 1;
+	while (!q.empty())
 	{
-		current = stack.top();
-		stack.pop();
+		cur = q.front();
+		q.pop();
+		cout << cur << ' ';
 
-		if (isVisited[current] == false)
+		for (int i = 0; i < (int)g[cur].size(); i++)
 		{
-			isVisited[current] = true;
-			cout << current << " ";
-		}
-
-		for (int i = 0; i < (int)(vertex[current].size()); i++)
-		{
-			next = vertex[current][i];
-			if (isVisited[next] == false)
+			int next = g[cur][i];
+			if (isVisited[next] == 0)
 			{
-				stack.push(current);
-				stack.push(next);
-				break;
+				q.push(next);
+				isVisited[next] = 1;
 			}
 		}
 	}
 }
 
-void BFS(vector<int> vertex[], int start)
+void sortGraph()
 {
-	queue<int> queue;
-	bool isVisited[1001] = { 0 };
-	int current = start, next;
-
-	queue.push(current);
-	cout << current << " ";
-	isVisited[current] = true;
-
-	while (!queue.empty())
+	for (int i = 0; i < (int)g.size(); i++)
 	{
-		current = queue.front();
-		queue.pop();
-		for (int i = 0; i < (int)(vertex[current].size()); i++)
-		{
-			next = vertex[current][i];
-			if (isVisited[next] == false)
-			{
-				queue.push(next);
-				cout << next << " ";
-				isVisited[next] = true;
-			}
-		}
+		sort(g[i].begin(), g[i].end());
 	}
 }
