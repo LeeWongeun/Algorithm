@@ -1,49 +1,57 @@
-#include<iostream>
-#include<algorithm>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-int BinarySearch(int A[], int size, int d) {
-	int begin = 0, end = size - 1;
-	int index = size - 1;
-	while (begin <= end) {
-		if (A[(begin+end) / 2] > d) {
-			end = ((begin + end) / 2) - 1;
-		}
-		else if (A[(begin + end) / 2] == d) {
-			return (begin+end) / 2;
-		}
-		else if (A[(begin + end) / 2] < d) {
-			begin = ((begin + end) / 2) + 1;
-		}
-	}
-	return -1;
-}
+int BS(int n, int start, int end);
 
-int main() {
+vector<int> vec;
+vector<int> dist;
+int n, m;
+
+int main()
+{
 	ios::sync_with_stdio(0);
 	cin.tie(0);
-
-	int A[100000], B[100000], n, m;
+	cout.tie(0);
 
 	cin >> n;
-	for (int i = 0; i < n; i++) {
-		cin >> A[i];
+	vec.resize(n);
+	for (int i = 0; i < n; i++)
+	{
+		cin >> vec[i];
 	}
+
+	sort(vec.begin(), vec.end());
 
 	cin >> m;
-	for (int i = 0; i < m; i++) {
-		cin >> B[i];
+	for (int i = 0; i < m; i++)
+	{
+		int num;
+		cin >> num;
+		cout << BS(num, 0, vec.size() - 1) << '\n';
 	}
+}
 
-	sort(A, A + n);
+int BS(int n, int start, int end)
+{
+	int m = (start + end) / 2;
 
-	for (int i = 0; i < m; i++) {
-		if (BinarySearch(A,n,B[i]) == -1) {
-			cout << "0" << "\n";
-		}
-		else {
-			cout << "1" << "\n";
-		}
+	if (start > end)
+	{
+		return 0;
+	}
+	if (vec[m] == n)
+	{
+		return 1;
+	}
+	else if (vec[m] > n)
+	{
+		return BS(n, start, m - 1);
+	}
+	else if (vec[m] < n)
+	{
+		return BS(n, m + 1, end);
 	}
 }
