@@ -1,43 +1,32 @@
-#include <iostream>
+#include<iostream>
+#include <vector>
 
 using namespace std;
 
-void getInput(int (&arr)[10], int n);
-int calcCoin(int arr[], int n, int k);
-
+int n, k;
 
 int main()
 {
-	int n, k, ans;
-	int arr[10];
-	cin >> n >> k;
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
 
-	getInput(arr,n);
-	ans = calcCoin(arr, n, k);
-
-	cout << ans;
-}
-
-void getInput(int(&arr)[10], int n)
-{
-	for (int i=0; i < n; i++)
-	{
-		cin >> arr[i];
-	}
-}
-
-int calcCoin(int arr[], int n, int k)
-{
-	int cnt = 0;
+	vector<int> coin;
+	int result = 0;
 	
-	for (int i = n-1; i >= 0; i--)
+	cin >> n >> k;
+	coin.resize(n);
+	for (int i = 0; i < n; i++)
 	{
-		cnt = cnt + (k / arr[i]);
-		k = k - (arr[i] * (k / arr[i]));
-		if (k <= 0)
-		{
-			break;
-		}
+		cin >> coin[i];
 	}
-	return cnt;
+
+	for (int i = n - 1; i >= 0; i--)
+	{
+		int count = k / coin[i];
+		k = k - coin[i] * count;
+		result += count;
+	}
+
+	cout << result;
 }
