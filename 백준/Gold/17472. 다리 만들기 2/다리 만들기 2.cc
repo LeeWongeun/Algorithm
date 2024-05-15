@@ -119,7 +119,6 @@ int find(int num)
 
 void SetLandNum()
 {
-	//섬 번호 부여
 	for (int i = 1; i <= n; i++)
 	{
 		for (int j = 1; j <= m; j++)
@@ -135,7 +134,6 @@ void SetLandNum()
 
 void GetEdges()
 {
-	//상하좌우 확인해서 다른 섬이면 엣지로 추가, 같은 섬이면 바로 컨티뉴
 	for (int i = 1; i <= n; i++)
 	{
 		for (int j = 1; j <= m; j++)
@@ -145,7 +143,6 @@ void GetEdges()
 				continue;
 			}
 
-			//왼쪽 확인
 			int row = i;
 			int col = j - 1;
 			for (; col > 0; --col)
@@ -165,7 +162,6 @@ void GetEdges()
 				}
 			}
 
-			//위쪽 확인
 			row = i - 1;
 			col = j;
 			for (; row > 0; --row)
