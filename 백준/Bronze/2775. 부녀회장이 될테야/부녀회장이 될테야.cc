@@ -14,7 +14,7 @@ int main()
 	for (int t = 0; t < testcase; t++)
 	{
 		cin >> k >> n;
-		//arr[a][b] = arr[a-1][0] + ... + arr[a-1][b];
+		//arr[a][b] = arr[a][b-1] + arr[a-1][b];
 		vector<vector<int>> vec(k + 1, vector<int>(n + 1, 0));
 
 		for (int i = 0; i <= n; i++)
@@ -24,12 +24,9 @@ int main()
 
 		for (int i = 1; i <= k; i++)
 		{
-			for (int j = 0; j <= n; j++)
+			for (int j = 1; j <= n; j++)
 			{
-				for (int k = 0; k <= j; k++)
-				{
-					vec[i][j] += vec[i - 1][k];
-				}
+				vec[i][j] = vec[i][j - 1] + vec[i - 1][j];
 			}
 		}
 		cout << vec[k][n] << '\n';
