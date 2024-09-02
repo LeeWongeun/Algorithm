@@ -1,28 +1,13 @@
 #include <string>
 #include <vector>
-#include <queue>
 #include <cstdlib>
+#include <cmath>
 
 using namespace std;
 
-int answer = 0;
-int visited[10000000] = { 0 };
-
-int vtoi(vector<int> vec)
-{
-    int num = 0;
-
-    for (int i = 0; i < vec.size(); i++)
-    {
-        num = num * 10 + vec[i];
-    }
-
-    return num;
-}
-
 bool isPrime(int num)
 {
-    if (num == 1 || num == 0)
+    if (num < 2)
     {
         return false;
     }
@@ -37,46 +22,41 @@ bool isPrime(int num)
     return true;
 }
 
-void DFS(vector<int> numbers, int startIndex, int k, vector<int> selected, vector<int> vec)
+void permutation(const string& numbers, string& curNum, int depth, int(&selected)[7], int& answer, vector<int>& visited)
 {
-    int a = vtoi(vec);
-
-    if (visited[a] == 0)
+    if (!curNum.empty())
     {
-        visited[a] = 1;
-        if (isPrime(a))
+        int cur = stoi(curNum);
+        if (!visited[cur] && isPrime(cur))
         {
+            visited[cur] = 1;
             answer++;
         }
     }
 
-    if (vec.size() == k) return;
+    if (depth == numbers.size())
+    {
+        return;
+    }
 
-    for (int i = 0; i < k; i++)
+    for (int i = 0; i < numbers.size(); i++)
     {
         if (selected[i] == 1) continue;
 
-        vec.push_back(numbers[i]);
         selected[i] = 1;
-        DFS(numbers, i, k, selected, vec);
-        vec.pop_back();
+        curNum += numbers[i];
+        permutation(numbers, curNum, depth + 1, selected, answer, visited);
         selected[i] = 0;
+        curNum.pop_back();
     }
 }
 
 int solution(string numbers) {
-    vector<int> numbersVec;
-    for (int i = 0; i < numbers.size(); i++)
-    {
-        numbersVec.push_back(numbers[i] - '0');
-    }
+    int answer = 0;
+    int selected[7] = { 0 };
+    vector<int> visited(pow(10,numbers.size()), 0);
+    string curNum;
 
-    vector<int> selected(numbersVec.size());
-    vector<int> vec;
-
-    for (int i = 1; i <= numbers.size(); i++)
-    {
-        DFS(numbersVec, 0, i, selected, vec);
-    }
+    permutation(numbers, curNum, 0, selected, answer, visited);
     return answer;
 }
