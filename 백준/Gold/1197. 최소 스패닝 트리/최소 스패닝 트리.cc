@@ -1,60 +1,58 @@
 #include <iostream>
-#include <queue>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-void input(int& v, int& e, vector<vector<pair<int, int>>>& g)
+vector<int> u;
+
+int find(int a)
 {
-	cin >> v >> e;
-	g.resize(v);
-	for (int i = 0; i < e; i++)
-	{
-		int to, from, cost;
-		cin >> from >> to >> cost;
-		g[from - 1].push_back({ to-1,cost });
-		g[to - 1].push_back({ from - 1,cost });
-	}
+	if (a == u[a]) return a;
+
+	return find(u[a]);
 }
 
-int MST(int v, int e, vector<vector<pair<int, int>>>& g)
+void unionFunc(int a, int b)
 {
-	priority_queue<pair<int, int>> pq; //앞:cost 뒤:노드
-	vector<int> visit(v, 0);
-	pq.push({ 0,0 });
-	int totalCost = 0;
+	int rootA = find(a);
+	int rootB = find(b);
 
-
-	while (!pq.empty())
-	{
-		pair<int, int> cur = pq.top(); //앞:cost 뒤:노드
-		pq.pop();
-		if (visit[cur.second] == 0)
-		{
-			visit[cur.second] = 1;
-			totalCost += -cur.first;
-		}
-		for (int i = 0; i < g[cur.second].size(); i++)
-		{
-			pair<int,int> next = g[cur.second][i];
-			if (visit[next.first] == 0)
-			{
-				pq.push({ -next.second,next.first });
-			}
-		}
-	}
-
-	return totalCost;
+	u[rootB] = rootA;
 }
 
 int main()
 {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int answer = 0;
+	int cnt = 0;
 	int v, e;
-	vector<vector<pair<int, int>>> g;
+	cin >> v >> e;
 
-	input(v, e, g);
-	cout << MST(v, e, g);
+	vector<vector<int>> edges;
+	for (int i = 0; i < e; i++)
+	{
+		int s, e, cost;
+		cin >> s >> e >> cost;
+		edges.push_back({ cost,s,e });
+	}
+
+	sort(edges.begin(), edges.end());
+
+	for (int i = 0; i <= v; i++)
+	{
+		u.push_back(i);
+	}
+
+	for (int i = 0; i < e; i++)
+	{
+		if (find(edges[i][1]) == find(edges[i][2])) continue;
+
+		cnt++;
+		answer += edges[i][0];
+		unionFunc(edges[i][1], edges[i][2]);
+		if (cnt == v - 1) break;
+	}
+
+	cout << answer;
+	return 0;
 }
-
