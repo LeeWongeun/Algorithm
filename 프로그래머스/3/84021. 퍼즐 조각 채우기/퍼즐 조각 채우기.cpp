@@ -16,11 +16,9 @@ void rotateShape(vector<pair<int, int>>& a) {
     }
 }
 
-bool isSameShape(const vector<pair<int, int>> &a, vector<pair<int, int>> b)
-{
+bool isSameShape(const vector<pair<int, int>> &a, vector<pair<int, int>> b){
     int size = a.size();
-    for (int rotate = 0; rotate < 4; rotate++)
-    {
+    for (int rotate = 0; rotate < 4; rotate++){
         // 첫 좌표를 기준점으로 해서 정규화
         pair<int, int> offsetA = a[0];
         pair<int, int> offsetB = b[0];
@@ -59,8 +57,7 @@ void bfs(pair<int, int> start, int checkInt, vector<vector<int>>& visited, const
             pair<int, int> next = { cur.first + direction.first, cur.second + direction.second };
             if (next.first < 0 || next.first >= inVec.size() || next.second < 0 || next.second >= inVec.size())
                 continue;
-            if (inVec[next.first][next.second] == checkInt && visited[next.first][next.second] == 0)
-            {
+            if (inVec[next.first][next.second] == checkInt && visited[next.first][next.second] == 0){
                 visited[next.first][next.second] = 1;
                 q.push(next);
                 shape.push_back(next);
@@ -92,14 +89,11 @@ int solution(vector<vector<int>> game_board, vector<vector<int>> table) {
     sort(puzzles.begin(), puzzles.end());
 
     vector<bool> used(puzzles.size(), 0);
-    for (auto blank : blanks)
-    {
-        for (int i = 0; i < puzzles.size(); i++)
-        {
+    for (auto blank : blanks){
+        for (int i = 0; i < puzzles.size(); i++){
             if (blank.size() != puzzles[i].size()) continue;
 
-            if (used[i] == 0 && isSameShape(blank, puzzles[i]))
-            {
+            if (used[i] == 0 && isSameShape(blank, puzzles[i])){
                 answer += blank.size();
                 used[i] = 1;
                 break;
